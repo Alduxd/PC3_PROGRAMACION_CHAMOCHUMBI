@@ -1,0 +1,83 @@
+@model NewsPortal.Services.EnrichedPostDto
+@{
+    ViewData["Title"] = Model.Title;
+}
+<div class="container mt-4">
+    <div class="card fun-card p-4">
+        <h2 class="fun-title"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/sticky.svg" class="icon" alt="post" />@Model.Title</h2>
+        <p class="text-muted">por <b>@Model.Author?.name</b> <span class="badge bg-info text-dark ms-2"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/envelope.svg" class="icon" alt="email" />@Model.Author?.email</span></p>
+        <p class="fs-5">@Model.Body</p>
+        <div class="d-flex align-items-center mb-3">
+            <span class="fun-badge me-2"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/chat-dots.svg" class="icon" alt="comentarios" />@Model.Comments.Count comentarios 💬</span>
+        </div>
+        <hr />
+        <h4 class="mb-3"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/chat-left-text.svg" class="icon" alt="comentarios" />Comentarios</h4>
+        <div>
+            @if (Model.Comments != null)
+            {
+                foreach (var comment in Model.Comments.OrderByDescending(c => c.body != null ? c.body.Length : 0))
+                {
+                    <div class="fun-comment mb-3">
+                        <strong><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/person-circle.svg" class="icon" alt="user" />@comment.name</strong> <span class="text-muted small">(<img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/envelope.svg" class="icon" alt="email" />@comment.email)</span>
+                        <div>@comment.body</div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="mb-3 mt-4">
+            <form id="feedbackForm">
+                <input type="hidden" name="postId" value="@Model.Id" />
+                <button type="button" class="btn btn-success fun-btn me-2" id="likeBtn" onclick="sendFeedback('like')"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/hand-thumbs-up.svg" class="icon" alt="like" />Me gustó</button>
+                <button type="button" class="btn btn-danger fun-btn" id="dislikeBtn" onclick="sendFeedback('dislike')"><img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/hand-thumbs-down.svg" class="icon" alt="dislike" />No me gustó</button>
+            </form>
+            <div id="feedbackMsg" class="mt-2"></div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+<script>
+    let feedbackSent = false;
+    function sendFeedback(sentimiento) {
+        if (feedbackSent) return;
+        var postId = @Model.Id;
+        fetch('/api/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ postId: postId, sentimiento: sentimiento })
+        })
+        .then(async r => {
+            if (r.ok) {
+                document.getElementById('feedbackMsg').innerHTML = '<span class="text-success">¡Gracias por tu feedback! 🎉</span>';
+            } else {
+                let msg = 'Error desconocido';
+                let text = '';
+                try {
+                    // Intenta leer como texto primero
+                    text = await r.text();
+                    // Intenta parsear como JSON si no es HTML
+                    if (text.trim().startsWith('{')) {
+                        const data = JSON.parse(text);
+                        msg = data.message || JSON.stringify(data);
+                    } else if (text.trim().startsWith('<')) {
+                        msg = 'Error del servidor o ruta no encontrada.';
+                    } else {
+                        msg = text;
+                    }
+                } catch {
+                    msg = text || 'Error inesperado.';
+                }
+                document.getElementById('feedbackMsg').innerHTML = '<span class="text-danger">' + msg + '</span>';
+            }
+            document.getElementById('likeBtn').disabled = true;
+            document.getElementById('dislikeBtn').disabled = true;
+            feedbackSent = true;
+        })
+        .catch(err => {
+            document.getElementById('feedbackMsg').innerHTML = '<span class="text-danger">' + (err.message || 'Error de red o servidor.') + '</span>';
+            document.getElementById('likeBtn').disabled = true;
+            document.getElementById('dislikeBtn').disabled = true;
+            feedbackSent = true;
+        });
+    }
+</script>
+}
