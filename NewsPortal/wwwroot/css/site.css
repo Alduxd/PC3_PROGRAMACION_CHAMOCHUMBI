@@ -19,4 +19,107 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png'), linear-gradient(120deg, #f0f4f8 0%, #e0e7ff 100%);
+  background-blend-mode: lighten;
+  font-family: 'Montserrat', 'Roboto', Arial, sans-serif;
+  color: #22223b;
+  min-height: 100vh;
+}
+
+.navbar {
+  background: #13b9c5 !important;
+  box-shadow: 0 2px 12px #a5b4fc33;
+  border-radius: 0 0 1.5rem 1.5rem;
+}
+
+.navbar-brand {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  color: #4f46e5 !important;
+  letter-spacing: 2px;
+}
+
+.card.fun-card {
+  border-radius: 2rem;
+  box-shadow: 0 6px 24px #a5b4fc33;
+  border: 2px solid #a5b4fc33;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: url('https://www.transparenttextures.com/patterns/geometry2.png') repeat, #fff;
+  background-blend-mode: lighten;
+}
+
+.card.fun-card:hover {
+  transform: scale(1.04) rotate(-1deg);
+  box-shadow: 0 12px 36px #6366f133;
+}
+
+.fun-title {
+  color: #4f46e5;
+  font-family: 'Fredoka One', cursive;
+  letter-spacing: 2px;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.fun-btn {
+  border-radius: 2rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  background: linear-gradient(90deg, #6366f1 0%, #a5b4fc 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px #6366f133;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.fun-btn:hover {
+  background: linear-gradient(90deg, #a5b4fc 0%, #6366f1 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px #6366f133;
+}
+
+.fun-badge {
+  background: linear-gradient(90deg, #fbbf24 60%, #f59e42 100%);
+  color: #fff;
+  font-size: 1rem;
+  border-radius: 1rem;
+  padding: 0.3em 0.8em;
+  font-weight: 600;
+  box-shadow: 0 2px 8px #fbbf2433;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.fun-comment {
+  background: url('https://www.transparenttextures.com/patterns/diagmonds-light.png') repeat, #f1f5f9;
+  border-radius: 1rem;
+  margin-bottom: 0.5em;
+  padding: 0.7em 1em;
+  border-left: 5px solid #6366f1;
+  box-shadow: 0 2px 8px #6366f133;
+}
+
+footer {
+  background: url('https://www.transparenttextures.com/patterns/hexellence.png') repeat, #f3f4f6;
+  border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0 -2px 12px #a5b4fc33;
+  margin-top: 3rem;
+  padding: 1.5rem 0;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.icon {
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: middle;
+  margin-right: 0.3em;
 }
