@@ -3,22 +3,19 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copia los archivos de proyecto y restaura dependencias
-COPY *.sln .
-COPY NewsPortal/*.csproj ./NewsPortal/
+COPY ../*.sln ./
+COPY ./*.csproj ./
 RUN dotnet restore
 
 # Copia el resto del código y publica
-COPY NewsPortal/. ./NewsPortal/
-WORKDIR /app/NewsPortal
+COPY . ./
 RUN dotnet publish -c Release -o out
 
 # Etapa 2: runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app/NewsPortal/out ./
+COPY --from=build /app/out ./
 
-# Puerto por defecto para ASP.NET Core
 EXPOSE 80
 
-# Comando de inicio
 ENTRYPOINT ["dotnet", "NewsPortal.dll"]
